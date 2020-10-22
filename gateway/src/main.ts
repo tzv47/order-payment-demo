@@ -7,15 +7,7 @@ import { AppModule } from "./app.module";
 
 import bodyParser = require("body-parser");
 
-// import { TokenExpiredExceptionListener } from "./core/auth/exceptions/listeners/token-expired-exception.listener";
-// import { GlobalErrorExceptionListener } from "./shared/exceptions/listeners/global-error-exception.listener";
-// import { TokensManager } from "./core/auth";
-// import { KibanaLogger } from "./shared/logger";
-
 const setupGlobalFilters = (app: INestApplication): void => {
-  //   const { httpAdapter } = app.get(HttpAdapterHost);
-  //   const kibanaLogger = app.get<KibanaLogger>(KibanaLogger);
-  //   const tokensManager = app.get<TokensManager>(TokensManager);
   app.useGlobalFilters();
 };
 

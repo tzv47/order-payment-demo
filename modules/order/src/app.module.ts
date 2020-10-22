@@ -4,6 +4,8 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 // import { ApiModule } from "./api";
 import { getConnectionToken, TypegooseModule } from "nestjs-typegoose";
 import { ApiModule } from "./api/api.module";
+import { DataModule } from "./data/data.module";
+import { SharedModule } from "./shared/shared.module";
 
 @Module({
   imports: [
@@ -20,7 +22,9 @@ import { ApiModule } from "./api/api.module";
       }),
       inject: [ConfigService]
     }),
-    ApiModule
+    ApiModule,
+    DataModule,
+    SharedModule
   ],
   controllers: [],
   providers: []

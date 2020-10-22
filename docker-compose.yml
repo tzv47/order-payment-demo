@@ -12,6 +12,7 @@ services:
   gateway:
     image: node:10
     working_dir: /usr/src/app
+    container_name: 'order-payment-demo_gateway'
     # environment:
     #   MONGO_DATABASE: '${MONGO_DATABASE:-gateway}'
     #   URL_MONGODB: '${URL_MONGODB:-mongodb://mongodb:27017/gateway}'
@@ -31,6 +32,7 @@ services:
   order:
     image: node:10
     working_dir: /usr/src/app
+    container_name: 'order-payment-demo_order'
     # environment:
     #   MONGO_DATABASE: '${MONGO_DATABASE:-gateway}'
     #   URL_MONGODB: '${URL_MONGODB:-mongodb://mongodb:27017/gateway}'
@@ -47,19 +49,22 @@ services:
       - '/root/.npm'
     command: bash -c "npm run docker:dev"
 
-  # policy:
-  #   image: node:10
-  #   working_dir: /usr/src/app
-  #   depends_on:
-  #     - mongodb
-  #   networks:
-  #     - demo
-  #   ports:
-  #     - '8082:8082'
-  #   volumes:
-  #     - './modules/policy:/usr/src/app'
-  #     - '/root/.npm'
-  #   command: bash -c "npm install && npm run docker:dev"
+  mongo-seeding:
+    image: node:10
+    container_name: order-payment-demo_mongo_seeding
+    volumes:
+      - './gateway:/usr/src/app/gateway'
+      - './modules/order:/usr/src/app/order'
+    depends_on:
+      - mongodb
+    #Here is the command we use to initiate the mongodb seeding
+    command: >
+      sh -c " npm install -g mongo-seeding-cli
+      && cd /usr/src/app/gateway/seed && npm i && seed -u 'mongodb://mongodb:27017/gateway' --drop-database /usr/src/app/gateway/seed/data
+      && cd /usr/src/app/order/seed && npm i && seed -u 'mongodb://mongodb:27017/orders' --drop-database /usr/src/app/order/seed/data"
+    networks:
+      - demo
+
 networks:
   demo:
     driver: bridge

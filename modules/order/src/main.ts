@@ -6,12 +6,12 @@ import { setGlobalOptions, Severity } from "@typegoose/typegoose";
 import bodyParser = require("body-parser");
 
 const setupSwagger = (app: INestApplication): void => {
-  const options = new DocumentBuilder().setTitle("Leaves Module").setDescription("The leave module API description").setVersion("2.0").build();
+  const options = new DocumentBuilder().setTitle("Order Module").setDescription("The order module API description").setVersion("1.0").build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup("documentation", app, document);
 };
 
-async function bootstrap() {
+const bootstrap = async () => {
   const app = await NestFactory.create(AppModule);
 
   app.use(bodyParser.json({ limit: "50mb" }));
@@ -28,7 +28,7 @@ async function bootstrap() {
   app.useGlobalFilters();
 
   await app.listen(8012);
-}
+};
 
 setGlobalOptions({
   schemaOptions: { versionKey: false, timestamps: true },
