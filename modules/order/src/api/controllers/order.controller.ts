@@ -23,7 +23,7 @@ export class OrderController {
     return this.orderRepository.get(id);
   }
 
-  @Post()
+  @Post("client/:clientId")
   @Bind(Param("clientId"), Body())
   @ApiOperation({ summary: "Create one order by client" })
   @ApiResponse({ status: 200, type: Order })
@@ -32,7 +32,7 @@ export class OrderController {
   }
 
   @Patch(":id/cancel")
-  @Bind(Param("id"), Body())
+  @Bind(Param("id"))
   @ApiOperation({ summary: "Pay one order" })
   @ApiResponse({ status: 200, type: Order })
   public async cancelOrder(id: string): Promise<Order> {
