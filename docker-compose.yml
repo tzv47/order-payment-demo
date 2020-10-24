@@ -49,6 +49,26 @@ services:
       - '/root/.npm'
     command: bash -c "npm run docker:dev"
 
+  payment:
+    image: node:10
+    working_dir: /usr/src/app
+    container_name: 'order-payment-demo_payment'
+    # environment:
+    #   MONGO_DATABASE: '${MONGO_DATABASE:-gateway}'
+    #   URL_MONGODB: '${URL_MONGODB:-mongodb://mongodb:27017/gateway}'
+    env_file:
+      - ./modules/payment/.env
+    depends_on:
+      - mongodb
+    networks:
+      - demo
+    ports:
+      - '8031:8031'
+    volumes:
+      - './modules/payment:/usr/src/app'
+      - '/root/.npm'
+    command: bash -c "npm run docker:dev"
+
   mongo-seeding:
     image: node:10
     container_name: order-payment-demo_mongo_seeding
