@@ -4,6 +4,7 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 // import { ApiModule } from "./api";
 import { getConnectionToken, TypegooseModule } from "nestjs-typegoose";
 import { ApiModule } from "./api/api.module";
+import { CoreModule } from "./core/core.module";
 import { DataModule } from "./data/data.module";
 import { SharedModule } from "./shared/shared.module";
 
@@ -23,6 +24,7 @@ import { SharedModule } from "./shared/shared.module";
       inject: [ConfigService]
     }),
     ApiModule,
+    CoreModule,
     DataModule,
     SharedModule
   ],

@@ -1,4 +1,7 @@
-import { IsDate, IsEnum, IsNumber, IsOptional, IsString } from "class-validator";
+import { prop } from "@typegoose/typegoose";
+import { Transform } from "class-transformer";
+import { IsDate, IsEnum, IsMongoId, IsNumber, IsOptional, IsString } from "class-validator";
+import { isValidObjectId } from "mongoose";
 import { AbstractModel } from "../../shared/abstracts";
 
 export enum OrderStatus {
@@ -15,7 +18,9 @@ export class Order extends AbstractModel {
   @IsNumber()
   public amount: number;
 
-  @IsString()
+  @IsMongoId()
+  @prop({ type: isValidObjectId })
+  @Transform(value => value.toString(), { toPlainOnly: true })
   public clientId: string;
 
   @IsEnum(OrderStatus)

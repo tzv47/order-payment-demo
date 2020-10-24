@@ -7,7 +7,7 @@ import { PasswordUtils } from "../security";
 import { JWT_TTL } from "./constants";
 
 export interface UserToken {
-  email: string;
+  user: string;
   expiresIn: string | number;
   accessToken: string;
 }
@@ -24,7 +24,7 @@ export class AuthManager {
     }
     const accessToken = this.jwtService.sign({ user: user.email });
     return {
-      email: user.email,
+      user: user.email,
       expiresIn,
       accessToken
     };
