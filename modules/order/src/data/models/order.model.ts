@@ -1,8 +1,7 @@
+import { ApiProperty } from "@nestjs/swagger";
 import { prop } from "@typegoose/typegoose";
-import { Transform } from "class-transformer";
-import { IsDate, IsEnum, IsMongoId, IsNumber, IsOptional, IsString } from "class-validator";
-import { isValidObjectId } from "mongoose";
 import { AbstractModel } from "../../shared/abstracts";
+import { ObjectId } from "mongodb";
 
 export enum OrderStatus {
   CREATED = "created",
@@ -12,17 +11,19 @@ export enum OrderStatus {
 }
 
 export class Order extends AbstractModel {
-  @IsDate()
-  public transactionDate?: Date;
+  @ApiProperty({ type: Date })
+  @prop({ required: true, type: Date })
+  public transactionDate!: Date;
 
-  @IsNumber()
-  public amount: number;
+  @ApiProperty({ type: Number })
+  @prop({ required: true, type: Number })
+  public amount!: number;
 
-  @IsMongoId()
-  @prop({ type: isValidObjectId })
-  @Transform(value => value.toString(), { toPlainOnly: true })
-  public clientId: string;
+  @ApiProperty({ type: ObjectId })
+  @prop({ required: true, type: ObjectId })
+  public clientId!: string;
 
-  @IsEnum(OrderStatus)
-  public status: string;
+  @ApiProperty({ enum: OrderStatus })
+  @prop({ required: true, enum: OrderStatus, default: OrderStatus.CREATED })
+  public status!: OrderStatus;
 }
