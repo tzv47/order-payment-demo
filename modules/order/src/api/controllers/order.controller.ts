@@ -11,8 +11,9 @@ export class OrderController {
   constructor(private orderRepository: OrderRepository, private orderManager: OrderManager) {}
 
   @Get("")
-  public async getAll(): Promise<Array<Order>> {
-    return this.orderRepository.all({});
+  @Bind(Query())
+  public async getAll(query: { clientId: string }): Promise<Array<Order>> {
+    return this.orderRepository.all({ clientId: query.clientId });
   }
 
   @Get(":id")
