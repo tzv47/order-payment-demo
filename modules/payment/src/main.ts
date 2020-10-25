@@ -4,6 +4,7 @@ import { AppModule } from "./app.module";
 import { INestApplication, ValidationPipe } from "@nestjs/common";
 import { setGlobalOptions, Severity } from "@typegoose/typegoose";
 import bodyParser = require("body-parser");
+import { AllExceptionsFilter } from "./shared/filters/all-exeptions.filter";
 
 const setupSwagger = (app: INestApplication): void => {
   const options = new DocumentBuilder()
@@ -29,7 +30,7 @@ const bootstrap = async () => {
     })
   );
 
-  app.useGlobalFilters();
+  app.useGlobalFilters(new AllExceptionsFilter("payment"));
 
   await app.listen(8031);
 };

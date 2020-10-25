@@ -75,13 +75,15 @@ services:
     volumes:
       - './gateway:/usr/src/app/gateway'
       - './modules/order:/usr/src/app/order'
+      - './modules/payment:/usr/src/app/payment'
     depends_on:
       - mongodb
     #Here is the command we use to initiate the mongodb seeding
     command: >
       sh -c " npm install -g mongo-seeding-cli
       && cd /usr/src/app/gateway/seed && npm i && seed -u 'mongodb://mongodb:27017/gateway' --drop-database /usr/src/app/gateway/seed/data
-      && cd /usr/src/app/order/seed && npm i && seed -u 'mongodb://mongodb:27017/orders' --drop-database /usr/src/app/order/seed/data"
+      && cd /usr/src/app/order/seed && npm i && seed -u 'mongodb://mongodb:27017/orders' --drop-database /usr/src/app/order/seed/data
+      && cd /usr/src/app/payment/seed && npm i && seed -u 'mongodb://mongodb:27017/payments' --drop-database /usr/src/app/payment/seed/data"
     networks:
       - demo
 

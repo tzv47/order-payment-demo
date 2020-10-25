@@ -1,12 +1,13 @@
 import { DataModule } from "@app/data/data.module";
 import { HttpModule, Module } from "@nestjs/common";
-import { OrderManager } from "./order/order.manager";
+import { PaymentManager } from "./payment.manager";
+import { WalletManager } from "./wallet.manager";
 
 const HTTP_CLIENTS = [];
 
 @Module({
   imports: [HttpModule, DataModule],
-  providers: [OrderManager],
-  exports: [OrderManager]
+  providers: [PaymentManager, WalletManager],
+  exports: [PaymentManager, WalletManager]
 })
 export class CoreModule {}
