@@ -29,6 +29,10 @@ export class PaymentManager {
       })
     );
 
+    if (paymentStatus) {
+      await this.walletManager.updateWalletBalance(wallet._id, wallet.balance - amount);
+    }
+
     return payment;
   }
 

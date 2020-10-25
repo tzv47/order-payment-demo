@@ -28,7 +28,8 @@ export class OrderController {
   @ApiOperation({ summary: "Create one order by client" })
   @ApiResponse({ status: 200, type: Order })
   public async createOrder(clientId: string, createOrderDto: CreateOrderDto): Promise<Order> {
-    return this.orderManager.createOrder(createOrderDto, clientId);
+    const createdOrder = await this.orderManager.createOrder(createOrderDto, clientId);
+    return this.orderManager.makePayment(createdOrder, createOrderDto.pinNo);
   }
 
   @Patch(":id/cancel")

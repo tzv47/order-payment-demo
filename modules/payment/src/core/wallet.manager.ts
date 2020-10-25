@@ -26,7 +26,7 @@ export class WalletManager {
     return wallet || null;
   }
 
-  public async updateWalletBalance(walletId, balance) {
-    return this.updateWalletBalance(walletId, balance);
+  public async updateWalletBalance(walletId: string, balance: number): Promise<Wallet> {
+    return this.walletRepository.updateWalletBalance(walletId, balance);
   }
 }

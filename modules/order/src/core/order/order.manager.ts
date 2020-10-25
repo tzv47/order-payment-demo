@@ -1,10 +1,12 @@
-import { HttpService, Injectable } from "@nestjs/common";
+import { HttpException, HttpService, Injectable } from "@nestjs/common";
 import { plainToClass } from "class-transformer";
-import { map } from "rxjs/operators";
+import { AxiosResponse } from "axios";
 
 import { CreateOrderDto } from "../../data/dtos/createOrder.dto";
 import { Order, OrderStatus } from "../../data/models";
 import { OrderRepository } from "../../data/repositories";
+
+import { catchError, map } from "rxjs/operators";
 
 interface PaymentData {
   clientId: string;
@@ -26,11 +28,10 @@ export class OrderManager {
     const order = plainToClass(Order, { clientId, status: OrderStatus.CREATED, ...rest });
 
     const createdOrder = await this.orderRepository.create(order);
-    const updatedOrder = await this.makePayment(createdOrder, pinNo);
-    return updatedOrder;
+    return createdOrder;
   }
 
-  private async makePayment(order: Order, pinNo: string): Promise<Order> {
+  public async makePayment(order: Order, pinNo: string): Promise<Order> {
     const paymentStatus = await this.getPaymentStatus({ clientId: order.clientId, amount: order.amount, pinNo });
 
     const updatedOrder = await this.orderRepository.updateOrderStatus(
@@ -45,11 +46,14 @@ export class OrderManager {
     return this.httpService
       .post(endpoint, paymentData)
       .pipe(
-        map(response => {
+        catchError(e => {
+          throw new HttpException(e.response.data, e.response.status);
+        }),
+        map((response: AxiosResponse<{ status: PaymentStatus }>) => {
+          console.log(response.data);
           return response.data.status;
         })
       )
-      .toPromise()
-      .catch(err => console.error(err));
+      .toPromise();
   }
 }
