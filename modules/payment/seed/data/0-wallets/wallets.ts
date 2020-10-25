@@ -7,7 +7,7 @@ const encryptPinNo = (password: string, salt: number = 6): string => {
   return bcrypt.hashSync(password, salt);
 };
 
-const wallets = [];
+const wallets: Array<Wallet> = [];
 
 const wallet_1 = {} as Wallet;
 

@@ -10,10 +10,4 @@ export class Client extends AbstractModel {
 
   @IsString()
   public phoneNumber?: string;
-
-  @IsString()
-  public pinNo: string;
-
-  @IsNumber()
-  public accountBalance: number;
 }
