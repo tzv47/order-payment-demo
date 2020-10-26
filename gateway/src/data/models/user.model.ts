@@ -4,6 +4,11 @@ import { modelOptions, prop } from "@typegoose/typegoose";
 import { plugin } from "mongoose";
 import { Base, TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
 
+export enum RolesTypeEnum {
+  ADMIN = "admin",
+  CLIENT = "client"
+}
+
 export class Token {
   @IsString()
   @prop({ required: true })
@@ -28,17 +33,6 @@ export class User extends Base<string> {
   @prop()
   public token: Token;
 
-  @IsBoolean()
-  @prop({ required: true })
-  public isActive: boolean = true;
-
-  @IsOptional()
-  @IsDate()
-  @prop()
-  public inactiveAt?: Date;
-
-  @IsOptional()
-  @IsDate()
-  @prop()
-  public lastLoginAt?: Date;
+  @prop({ required: true, enum: RolesTypeEnum, default: RolesTypeEnum.CLIENT })
+  public roleType!: RolesTypeEnum;
 }

@@ -3,6 +3,9 @@ import { AuthGuard } from "@nestjs/passport";
 import { pipe } from "rxjs";
 import { AxiosRequestConfig, AxiosResponse } from "axios";
 import { catchError, map } from "rxjs/operators";
+import { RolesGuard } from "../../../core/auth/guards/role.guard";
+import { HasRole } from "../../../core/security";
+import { RolesTypeEnum } from "../../../data/models";
 
 const catchApiResponse = () =>
   pipe(
@@ -21,7 +24,8 @@ export class OrderController {
   constructor(private httpClient: HttpService) {}
 
   @Get("")
-  @UseGuards(AuthGuard("jwt"))
+  @UseGuards(AuthGuard("jwt"), RolesGuard)
+  @HasRole(RolesTypeEnum.ADMIN)
   public async getAllOrders() {
     return this.httpClient
       .get(`${this.baseUrl}/orders`)
