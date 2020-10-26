@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: payments-env
+data:
+  gateway-env.sh: |
+    export MONGO_DATABASE=payments
+    export URL_MONGODB="mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@mongodb-0.mongodb:27017,mongodb-1.mongodb:27017,mongodb-2.mongodb:27017/${MONGO_DATABASE}?replicaSet=rs0&readPreference=primary"
+    export PAYMENT_MONGODB_URI="mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@mongodb-0.mongodb:27017,mongodb-1.mongodb:27017,mongodb-2.mongodb:27017/${MONGO_DATABASE}?replicaSet=rs0&readPreference=primary"

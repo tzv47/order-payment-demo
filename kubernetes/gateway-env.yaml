@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gateway-env
+data:
+  gateway-env.sh: |
+    export MONGO_DATABASE=gateway
+    export URL_MONGODB="mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@mongodb-0.mongodb:27017,mongodb-1.mongodb:27017,mongodb-2.mongodb:27017/${MONGO_DATABASE}?replicaSet=rs0&readPreference=primary"
+    export GATEWAY_MONGODB_URI="mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@mongodb-0.mongodb:27017,mongodb-1.mongodb:27017,mongodb-2.mongodb:27017/${MONGO_DATABASE}?replicaSet=rs0&readPreference=primary"
+    export BROKER_URL=amqp://${RABBIT_USERNAME}:${RABBIT_PASSWORD}@${RABBIT_HOSTNAME}:5672/${ENV}
+    export JWT_KEY=${JWT}
+    export JWT_TTL=900
+    export CONSOLE_DEBUG=0
