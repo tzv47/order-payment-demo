@@ -6,12 +6,22 @@ import { CoreModule } from "./core/core.module";
 import { DataModule } from "./data/data.module";
 import { SharedModule } from "./shared/shared.module";
 import { ApiModule } from "./api/api.module";
+import { NestBrokerModule, BROKER_TYPE_RABBIT } from "@briohr/nest-broker";
 
 export let Container: any;
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true
+    }),
+    NestBrokerModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        url: configService.get("BROKER_URL"),
+        type: BROKER_TYPE_RABBIT,
+        service: "gateway"
+      }),
+      inject: [ConfigService]
     }),
     TypegooseModule.forRootAsync({
       imports: [ConfigModule],

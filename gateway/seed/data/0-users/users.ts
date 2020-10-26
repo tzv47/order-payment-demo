@@ -20,11 +20,11 @@ user_2.password = encryptPassword("password");
 user_2.roleType = "client";
 
 const user_3 = {} as any;
-user_2._id = getObjectId("admin@demo.com") as any;
-user_2.email = "admin@demo.com";
-user_2.password = encryptPassword("password");
-user_2.roleType = "admin";
+user_3._id = getObjectId("admin@demo.com") as any;
+user_3.email = "admin@demo.com";
+user_3.password = encryptPassword("password");
+user_3.roleType = "admin";
 
-users.push(user_1, user_2);
+users.push(user_1, user_2, user_3);
 
 export = users;

@@ -22,6 +22,7 @@
     "docker:dev": "npm install && rimraf dist && nest build && nest start --watch"
   },
   "dependencies": {
+    "@briohr/nest-broker": "^1.3.0",
     "@nestjs/common": "^7.0.0",
     "@nestjs/config": "^0.4.2",
     "@nestjs/core": "^7.0.0",
@@ -29,6 +30,7 @@
     "@nestjs/mongoose": "^7.0.1",
     "@nestjs/passport": "^7.0.0",
     "@nestjs/platform-express": "^7.0.0",
+    "@nestjs/swagger": "^4.6.1",
     "@nestjs/terminus": "^7.0.1",
     "@typegoose/typegoose": "^7.1.2",
     "bcrypt": "^4.0.1",

@@ -1,7 +1,8 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { ConflictException, Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { LoginUserDto } from "../../data/dtos/user.dto";
-import { User } from "../../data/models";
+import { plainToClass } from "class-transformer";
+import { LoginUserDto, NewUserDto } from "../../api/dtos/user.dto";
+import { RolesTypeEnum, User } from "../../data/models";
 import { UserRepository } from "../../data/repositories/user.repository";
 import { PasswordUtils } from "../security";
 import { JWT_TTL } from "./constants";
@@ -28,6 +29,24 @@ export class AuthManager {
       expiresIn,
       accessToken
     };
+  }
+
+  public async createUser({ email, password, roleType = RolesTypeEnum.CLIENT }: NewUserDto): Promise<User> {
+    const existingUser = await this.user.findByEmail(email);
+    if (existingUser) {
+      throw new ConflictException("This user already exists");
+    }
+    const user = plainToClass(User, {
+      email,
+      password: await PasswordUtils.hash(password),
+      roleType
+    });
+    try {
+      const newUser = await this.user.create(user);
+      return newUser;
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   private async validateUser(username: string, password: string): Promise<User> {
