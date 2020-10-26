@@ -2,7 +2,7 @@ import { HttpException, HttpService, Injectable } from "@nestjs/common";
 import { plainToClass } from "class-transformer";
 import { AxiosResponse } from "axios";
 
-import { CreateOrderDto } from "../../data/dtos/createOrder.dto";
+import { CreateOrderDto } from "../../api/dtos/createOrder.dto";
 import { Order, OrderStatus } from "../../data/models";
 import { OrderRepository } from "../../data/repositories";
 

@@ -3,7 +3,7 @@ import { Controller, Get, Bind, Param, Query, Patch, Body, Post } from "@nestjs/
 import { PaymentRepository } from "../../data/repositories";
 import { PaymentManager } from "../../core/payment.manager";
 import { Payment } from "../../data/model";
-import { MakePaymentDto } from "../../data/dtos/make-payment.dto";
+import { MakePaymentDto } from "../dtos/make-payment.dto";
 
 @ApiTags("Payment")
 @Controller("payment")

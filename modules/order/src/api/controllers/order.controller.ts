@@ -3,7 +3,7 @@ import { Controller, Get, Bind, Param, Query, Patch, Body, Post } from "@nestjs/
 import { OrderRepository } from "../../data/repositories";
 import { Order, OrderStatus } from "../../data/models";
 import { OrderManager } from "../../core/order/order.manager";
-import { CreateOrderDto } from "../../data/dtos/createOrder.dto";
+import { CreateOrderDto } from "../dtos/createOrder.dto";
 
 @ApiTags("Orders")
 @Controller("orders")
@@ -12,8 +12,11 @@ export class OrderController {
 
   @Get("")
   @Bind(Query())
+  @ApiOperation({ summary: "Get all orders." })
+  @ApiResponse({ status: 200, type: Order, isArray: true })
   public async getAll(query: { clientId: string }): Promise<Array<Order>> {
-    return this.orderRepository.all({ clientId: query.clientId });
+    const { clientId } = query;
+    return this.orderRepository.all(clientId ? { clientId } : {});
   }
 
   @Get(":id")
@@ -21,7 +24,8 @@ export class OrderController {
   @ApiOperation({ summary: "Get one order by id." })
   @ApiResponse({ status: 200, type: Order })
   public async getOne(id: string, query: { clientId: string }): Promise<Order> {
-    return this.orderRepository.get(id, query ? { clientId: query.clientId } : {});
+    const { clientId } = query;
+    return this.orderRepository.get(id, clientId ? { clientId } : {});
   }
 
   @Post("client/:clientId")
@@ -35,7 +39,7 @@ export class OrderController {
 
   @Patch(":id/cancel")
   @Bind(Param("id"))
-  @ApiOperation({ summary: "Pay one order" })
+  @ApiOperation({ summary: "Cancel one order" })
   @ApiResponse({ status: 200, type: Order })
   public async cancelOrder(id: string): Promise<Order> {
     return this.orderRepository.updateOrderStatus(id, OrderStatus.CANCELLED);

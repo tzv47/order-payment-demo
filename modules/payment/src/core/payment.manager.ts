@@ -1,5 +1,5 @@
 import { BadRequestException, HttpService, Injectable, UnauthorizedException } from "@nestjs/common";
-import { MakePaymentDto } from "../data/dtos/make-payment.dto";
+import { MakePaymentDto } from "../api/dtos/make-payment.dto";
 import { Payment, PaymentStatus, Wallet } from "../data/model";
 import { PaymentRepository, WalletRepository } from "../data/repositories";
 import { WalletManager } from "./wallet.manager";
