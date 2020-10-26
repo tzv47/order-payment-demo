@@ -7,26 +7,4 @@ import { PinNoUtils } from "./security";
 @Injectable()
 export class WalletManager {
   constructor(private walletRepository: WalletRepository) {}
-
-  public async validateWallet(clientId: string, pinNo: string, payAmount: number): Promise<Wallet> {
-    const wallet = await this.walletRepository.getWalletByClient(clientId);
-
-    if (!wallet) {
-      throw new UnauthorizedException();
-    }
-
-    if (!PinNoUtils.check(pinNo, wallet.pinNo)) {
-      throw new UnauthorizedException();
-    }
-
-    if (payAmount > wallet.balance) {
-      throw new BadRequestException("Insufficient Wallet");
-    }
-
-    return wallet || null;
-  }
-
-  public async updateWalletBalance(walletId: string, balance: number): Promise<Wallet> {
-    return this.walletRepository.updateWalletBalance(walletId, balance);
-  }
 }

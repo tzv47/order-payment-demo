@@ -5,7 +5,8 @@ import { ObjectId } from "mongodb";
 
 export enum PaymentStatus {
   SUCCESS = "success",
-  DECLINED = "declined"
+  DECLINED = "declined",
+  PENDING = "pending"
 }
 
 export class Payment extends AbstractModel {

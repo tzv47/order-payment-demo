@@ -14,10 +14,10 @@ export class WalletRepository extends AbstractRepository<Wallet> {
     return this.model.findOne({ clientId });
   }
 
-  public async updateWalletBalance(_id: string, balance: number): Promise<Wallet> {
+  public async updateWalletBalance(_id: string, amount: number): Promise<Wallet> {
     return this.model.findOneAndUpdate(
       { _id },
-      { $set: { balance } },
+      { $inc: { balance: -amount } },
       {
         new: true
       }

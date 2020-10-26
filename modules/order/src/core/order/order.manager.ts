@@ -50,7 +50,6 @@ export class OrderManager {
           throw new HttpException(e.response.data, e.response.status);
         }),
         map((response: AxiosResponse<{ status: PaymentStatus }>) => {
-          console.log(response.data);
           return response.data.status;
         })
       )

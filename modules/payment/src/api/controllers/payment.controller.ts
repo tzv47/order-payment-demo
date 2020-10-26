@@ -20,6 +20,7 @@ export class PaymentController {
   @ApiOperation({ summary: "Create one payment transaction" })
   @ApiResponse({ status: 200, type: Payment })
   public async makePayment(makePaymentDto: MakePaymentDto): Promise<Payment> {
-    return this.paymentManager.pay(makePaymentDto);
+    const payment = await this.paymentManager.createPayment(makePaymentDto);
+    return this.paymentManager.pay(payment);
   }
 }

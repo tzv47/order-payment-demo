@@ -23,7 +23,6 @@ export class OrderController {
   @Get("")
   @UseGuards(AuthGuard("jwt"))
   public async getAllOrders() {
-    console.log("hello");
     return this.httpClient
       .get(`${this.baseUrl}/orders`)
       .pipe(catchApiResponse())
@@ -34,7 +33,6 @@ export class OrderController {
   @UseGuards(AuthGuard("jwt"))
   public async getMyOrders(@Request() req: any) {
     const query = { params: { clientId: req.user._id.toString() } };
-    console.log(query);
     return this.httpClient
       .get(`${this.baseUrl}/orders`, query)
       .pipe(catchApiResponse())
@@ -44,7 +42,6 @@ export class OrderController {
   @Post("me")
   @UseGuards(AuthGuard("jwt"))
   public async createMyOrder(@Request() req: any, @Body() body: any) {
-    console.log(body);
     return this.httpClient
       .post(`${this.baseUrl}/orders/client/${req.user._id.toString()}`, body)
       .pipe(catchApiResponse())
