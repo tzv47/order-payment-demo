@@ -17,11 +17,11 @@ export class OrderController {
   }
 
   @Get(":id")
-  @Bind(Param("id"))
+  @Bind(Param("id"), Query())
   @ApiOperation({ summary: "Get one order by id." })
   @ApiResponse({ status: 200, type: Order })
-  public async getOne(id: string): Promise<Order> {
-    return this.orderRepository.get(id);
+  public async getOne(id: string, query: { clientId: string }): Promise<Order> {
+    return this.orderRepository.get(id, query ? { clientId: query.clientId } : {});
   }
 
   @Post("client/:clientId")

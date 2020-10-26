@@ -18,6 +18,9 @@ enum PaymentStatus {
   SUCCESS = "success",
   DECLINED = "declined"
 }
+
+const delay = async (ms: number) => new Promise(res => setTimeout(res, ms));
+
 @Injectable()
 export class OrderManager {
   constructor(private orderRepository: OrderRepository, private readonly httpService: HttpService) {}
@@ -36,8 +39,16 @@ export class OrderManager {
 
     const updatedOrder = await this.orderRepository.updateOrderStatus(
       order._id,
-      paymentStatus === PaymentStatus.SUCCESS ? OrderStatus.DELIVERED : OrderStatus.CANCELLED
+      paymentStatus === PaymentStatus.SUCCESS ? OrderStatus.CONFIRMED : OrderStatus.CANCELLED
     );
+
+    // Non blocking, return above process result first
+    delay(10000).then(() => {
+      if (paymentStatus === PaymentStatus.SUCCESS) {
+        this.orderRepository.updateOrderStatus(order._id, OrderStatus.DELIVERED);
+      }
+    });
+
     return updatedOrder;
   }
 

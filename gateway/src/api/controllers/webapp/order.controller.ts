@@ -48,6 +48,16 @@ export class OrderController {
       .toPromise();
   }
 
+  @Get("me/:id")
+  @UseGuards(AuthGuard("jwt"))
+  public async getOneOrders(@Request() req: any, @Param("id") id: string) {
+    const query = { params: { clientId: req.user._id.toString() } };
+    return this.httpClient
+      .get(`${this.baseUrl}/orders/${id}`, query)
+      .pipe(catchApiResponse())
+      .toPromise();
+  }
+
   @Patch("me/:id/cancel")
   @UseGuards(AuthGuard("jwt"))
   public async cancelMyOrder(@Request() req: any, @Param("id") id: string) {
