@@ -6,6 +6,18 @@ import * as helmet from "helmet";
 import { AppModule } from "./app.module";
 
 import bodyParser = require("body-parser");
+import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+
+const setupSwagger = (app: INestApplication): void => {
+  const options = new DocumentBuilder()
+    .setTitle("Gateway")
+    .setDescription("The gateway API description")
+    .setVersion("1.0")
+    .addBearerAuth({ type: "http", scheme: "bearer", bearerFormat: "JWT" }, "access-token")
+    .build();
+  const document = SwaggerModule.createDocument(app, options);
+  SwaggerModule.setup("documentation", app, document);
+};
 
 const setupGlobalFilters = (app: INestApplication): void => {
   app.useGlobalFilters();
@@ -17,6 +29,7 @@ async function bootstrap() {
   app.use(bodyParser.json({ limit: "50mb" }));
   app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
   app.setGlobalPrefix("v1/api");
+  setupSwagger(app);
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,

@@ -1,22 +1,14 @@
 import { Controller, Get, HttpService, UseGuards, Request, HttpException, Post, Bind, Body, Param, Patch } from "@nestjs/common";
+import { ApiBearerAuth, ApiCreatedResponse, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { AuthGuard } from "@nestjs/passport";
-import { pipe } from "rxjs";
-import { AxiosRequestConfig, AxiosResponse } from "axios";
-import { catchError, map } from "rxjs/operators";
+
 import { RolesGuard } from "../../../core/auth/guards/role.guard";
 import { HasRole } from "../../../core/security";
 import { RolesTypeEnum } from "../../../data/models";
+import { catchApiResponse } from "../../../shared/utils/api.util";
+import { CreateOrderDto } from "../../dtos/order.dto";
 
-const catchApiResponse = () =>
-  pipe(
-    catchError(e => {
-      throw new HttpException(e.response.data, e.response.status);
-    }),
-    map((response: AxiosResponse<any>) => {
-      return response.data;
-    })
-  );
-
+@ApiTags("Order")
 @Controller("order")
 export class OrderController {
   private baseUrl = "http://order:8012";
@@ -26,6 +18,9 @@ export class OrderController {
   @Get("")
   @UseGuards(AuthGuard("jwt"), RolesGuard)
   @HasRole(RolesTypeEnum.ADMIN)
+  @ApiOperation({ summary: "Get all orders" })
+  @ApiBearerAuth("access-token")
+  @ApiResponse({ status: 200 })
   public async getAllOrders() {
     return this.httpClient
       .get(`${this.baseUrl}/orders`)
@@ -35,6 +30,9 @@ export class OrderController {
 
   @Get("me")
   @UseGuards(AuthGuard("jwt"))
+  @ApiOperation({ summary: "Get all my orders" })
+  @ApiBearerAuth("access-token")
+  @ApiResponse({ status: 200 })
   public async getMyOrders(@Request() req: any) {
     const query = { params: { clientId: req.user._id.toString() } };
     return this.httpClient
@@ -45,7 +43,10 @@ export class OrderController {
 
   @Post("me")
   @UseGuards(AuthGuard("jwt"))
-  public async createMyOrder(@Request() req: any, @Body() body: any) {
+  @ApiOperation({ summary: "Create my order" })
+  @ApiBearerAuth("access-token")
+  @ApiResponse({ status: 200 })
+  public async createMyOrder(@Request() req: any, @Body() body: CreateOrderDto) {
     return this.httpClient
       .post(`${this.baseUrl}/orders/client/${req.user._id.toString()}`, body)
       .pipe(catchApiResponse())
@@ -54,6 +55,8 @@ export class OrderController {
 
   @Get("me/:id")
   @UseGuards(AuthGuard("jwt"))
+  @ApiOperation({ summary: "Get my order by id" })
+  @ApiResponse({ status: 200 })
   public async getOneOrders(@Request() req: any, @Param("id") id: string) {
     const query = { params: { clientId: req.user._id.toString() } };
     return this.httpClient
@@ -64,6 +67,8 @@ export class OrderController {
 
   @Patch("me/:id/cancel")
   @UseGuards(AuthGuard("jwt"))
+  @ApiOperation({ summary: "Cancel my order by id" })
+  @ApiResponse({ status: 200 })
   public async cancelMyOrder(@Request() req: any, @Param("id") id: string) {
     return this.httpClient
       .patch(`${this.baseUrl}/orders/${id}/cancel`)

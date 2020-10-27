@@ -1,6 +1,6 @@
 import { Controller, Post, Request, Body, Get, UseGuards } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
-import { ApiCreatedResponse, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiCreatedResponse, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 
 import { AuthManager, UserToken } from "../../../core/auth";
 
@@ -17,7 +17,7 @@ export class AuthController {
   constructor(private auth: AuthManager, private userRepository: UserRepository, private brokerService: NestBrokerService) {}
 
   @ApiOperation({ summary: "Login as a user" })
-  @ApiResponse({ status: 200 })
+  @ApiResponse({ status: 201 })
   @Post("login")
   public async login(@Body() body: LoginUserDto): Promise<UserToken> {
     return this.auth.login(body);
@@ -38,6 +38,7 @@ export class AuthController {
   @Get("")
   @ApiOperation({ summary: "Get all user" })
   @ApiResponse({ status: 200 })
+  @ApiBearerAuth("access-token")
   @UseGuards(AuthGuard("jwt"), RolesGuard)
   @HasRole(RolesTypeEnum.ADMIN)
   public async getAllUser() {
@@ -46,6 +47,7 @@ export class AuthController {
 
   @Get("whoami")
   @ApiOperation({ summary: "Get logged user" })
+  @ApiBearerAuth("access-token")
   @ApiResponse({ status: 200 })
   @UseGuards(AuthGuard("jwt"))
   public async testAuth(@Request() req: any): Promise<string> {

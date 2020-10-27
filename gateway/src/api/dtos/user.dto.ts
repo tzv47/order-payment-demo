@@ -12,10 +12,6 @@ export class LoginUserDto {
   @IsString()
   @IsNotEmpty()
   public password: string;
-
-  @ApiProperty()
-  @IsBoolean()
-  public rememberMe: boolean = false;
 }
 
 export class NewUserDto {
