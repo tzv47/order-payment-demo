@@ -9,12 +9,12 @@ import { UserRepository } from "../../../data/repositories/user.repository";
 import { RolesGuard } from "../../../core/auth/guards/role.guard";
 import { HasRole } from "../../../core/security";
 import { RolesTypeEnum } from "../../../data/models";
-import { type } from "os";
+import { NestBrokerService } from "@briohr/nest-broker";
 
 @ApiTags("Auth")
 @Controller("auth")
 export class AuthController {
-  constructor(private auth: AuthManager, private userRepository: UserRepository) {}
+  constructor(private auth: AuthManager, private userRepository: UserRepository, private brokerService: NestBrokerService) {}
 
   @ApiOperation({ summary: "Login as a user" })
   @ApiResponse({ status: 200 })
@@ -28,6 +28,10 @@ export class AuthController {
   @ApiResponse({ status: 200 })
   public async createUser(@Body() body: NewUserDto): Promise<String> {
     const user = await this.auth.createUser(body);
+    this.brokerService.publish("USER_CREATED", {
+      _id: user._id,
+      email: user.email
+    });
     return `User ${user.email} has been created`;
   }
 
