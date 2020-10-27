@@ -11,15 +11,15 @@
     - Mongoose
     - Microservices
 
-### Gateway Feature Explanation
+## Gateway Feature Explanation
 
 This is the single entry point of this app APIs. - Handle authentication, users, roles, security. - Redirect HTTP traffic to specific services using HttpClients
 ![](architecture.png)
 
-#### Authentication
+### Authentication
 
 At gateway level, JWT is being used as authentication strategies. There will `Guard` added to the controller to enforce the authentication
 
-##### Security
+### Security
 
 To secure some controller to suit the user role, `HasRole` decorator and its associated `Guard`, `RoleGuard` has been added.
