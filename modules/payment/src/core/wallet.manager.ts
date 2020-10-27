@@ -16,7 +16,8 @@ export class WalletManager {
       const newWallet = plainToClass(Wallet, {
         _id,
         clientId: _id,
-        pinNo: await bcrypt.hashSync("000000", 6)
+        pinNo: await bcrypt.hashSync("000000", 6),
+        balance: 1000
       });
       await this.walletRepository.create(newWallet);
     } catch (error) {
